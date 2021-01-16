@@ -126,7 +126,7 @@ class web_bot:
 
 
 if __name__ == "__main__":
-    bot = web_bot("Martin Molina", 234142156, "lemao452")
+    bot = web_bot("Martin Molina", 234142156, input("School Account Password: "))
     bot.google_logIn()
 
     # bot.submit_school_attendance()
