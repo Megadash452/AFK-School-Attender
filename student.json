@@ -1,0 +1,19 @@
+{
+    "name": "Sample Student",
+    "id": 123456789,
+    "email": "auto",
+    "password": "password",
+    "counselor": "Ms. C",
+
+    "schedule": [
+        {
+            "course name": "Course 0",
+            "teacher": "Mr. A",
+            "meet url": "https://meet.google.com/code"
+        }, {
+            "course name": "Course 1",
+            "teacher": "Mr. B",
+            "meet url": "https://meet.google.com/code"
+        }
+    ]
+}
