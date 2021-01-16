@@ -120,6 +120,11 @@ class web_bot:
 
     def go_to_class(self, class_number):
         self.browser.get(self.student.schedule[class_number]["meet url"])
+        time.sleep(1)
+
+        self.browser.find_elements_by_tag_name("svg")[0].click()
+        self.browser.find_elements_by_tag_name("svg")[6].click()
+        # click "Join now" button
 
         print("Entered ~~{}~~".format(self.student.schedule[class_number]["name"]))
         time.sleep(0.8)
@@ -127,8 +132,8 @@ class web_bot:
 
 if __name__ == "__main__":
     bot = web_bot("Martin Molina", 234142156, input("School Account Password: "))
-    bot.google_logIn()
 
+    bot.google_logIn()
     # bot.submit_school_attendance()
     bot.go_to_class(0)
 
