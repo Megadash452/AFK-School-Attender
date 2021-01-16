@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import datetime
 import time
+import json
 import os
 
 
@@ -16,7 +17,7 @@ class Student:
         self.id = id
         self.password = password
 
-        if not email:
+        if not email or email == "auto":
             self.email = self.first_name[0].lower() + self.last_name.lower() + str(self.id)[-4:] + "@clintonhs.net"
         else:
             self.email = email

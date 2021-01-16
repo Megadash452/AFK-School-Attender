@@ -1,0 +1,11 @@
+{
+    "student": {
+        "name": "Martin Molina",
+        "id": 234142156,
+        "email": "auto",
+        "password": "lemao452"
+    },
+    "schedule": [
+        {"course name":  "AP Physics C: E & M"}
+    ]
+}
