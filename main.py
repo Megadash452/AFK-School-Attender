@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
+from colorama import Style, Fore
 import datetime
 import time
 import json
@@ -15,8 +16,8 @@ import os
 errorNote_newLine = "\n                   "
 
 
-def log(msg, end="\n"):
-    print(f"@[{datetime.datetime.now().strftime('%H:%M:%S')}]", msg, end=end)
+def log(msg, end="\n", color=""):
+    print(f"{color}@[{datetime.datetime.now().strftime('%H:%M:%S')}]", msg, end=end)
 
 
 def error_note(*notes, sep="\n", end="\n"):
@@ -29,13 +30,13 @@ def error_note(*notes, sep="\n", end="\n"):
             if n is not note[-1]:
                 print(n, end=sep)
             else:
-                print(n)
+                print(n, Style.RESET_ALL)
     if '\n' not in sep:
         print(end=end)
 
 
 def warn(warning: str, *msgs):
-    log(f"-Error-: {warning}")
+    log(f"-Warning!-: {warning}", color=Fore.YELLOW)
     error_note(msgs)
 
 
@@ -227,12 +228,15 @@ class web_bot:
         try:
             WebDriverWait(self.browser, 5).until(
                 EC.element_to_be_clickable(
-                    (By.TAG_NAME, "svg")[0]
+                    (By.TAG_NAME, "svg")
                 )
-            ).click()
+            )
+            self.browser.find_elements_by_tag_name("svg")[0].click()
             self.browser.find_elements_by_tag_name("svg")[6].click()
-
             # TODO: Click "Join now" button
+            print("-- ", self.browser.find_elements_by_class_name("uArJ5e")[0].find_element_by_class_name("NPEfkd").text)
+            print("-- ", self.browser.find_elements_by_class_name("uArJ5e")[1].find_element_by_class_name("NPEfkd").text)
+            print("-- ", self.browser.find_elements_by_class_name("uArJ5e")[2].find_element_by_class_name("NPEfkd").text)
         except Exception as warning:
             self.browser.get("https://google.com/")
             warn(
@@ -240,8 +244,9 @@ class web_bot:
                 "Could not load {} meet link",
                 "Make sure the link is correct in \"student.json\""
             )
+            return
 
-        log(f"Entered ~~{self.student.schedule[class_number]['course name']}~~.")
+        log(f"Joined: '{self.student.schedule[class_number]['course name']}'")
 
 
 if __name__ == "__main__":
