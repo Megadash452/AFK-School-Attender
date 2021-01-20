@@ -37,11 +37,15 @@ def error_note(*notes, sep="\n", end="\n"):
 
 def warn(warning: str, *msgs):
     log(f"-Warning!-: {warning}", color=Fore.YELLOW)
-    error_note(msgs)
+    if msgs:
+        error_note(msgs)
 
 
-def exit_error(error: str, msg):
-    exit(f"@[{datetime.datetime.now().strftime('%H:%M:%S')}] Error: {error}\n  ^^^^^^^^   Note: {msg}")
+def exit_error(error: str, msg=""):
+    if msg:
+        exit(f"@[{datetime.datetime.now().strftime('%H:%M:%S')}] Error: {error}\n  ^^^^^^^^   Note: {msg}")
+    else:
+        exit(f"@[{datetime.datetime.now().strftime('%H:%M:%S')}] Error: {error}")
 
 
 class Student:
@@ -191,9 +195,9 @@ class web_bot:
 
             self.browser.find_elements_by_class_name("quantumWizTextinputPaperinputInput")[2]\
                         .send_keys(str(bot.student.id))
-        except Exception as error:
+        except Exception as warning:
             warn(
-                error,
+                warning,
                 "Could not load School Attendance page",
                 "Proceeding without submitting attendance"
             )
@@ -248,13 +252,56 @@ class web_bot:
 
         log(f"Joined: '{self.student.schedule[class_number]['course name']}'")
 
+    def send_email(self, recipients, subject, body):
+        """Separate recipients by a comma."""
+
+        self.browser.get("https://mail.google.com/mail/u/0/#inbox?compose=new")
+        log(f"Writing email to <{recipients}>")
+
+        try:
+            WebDriverWait(self.browser, 7).until(
+                EC.element_to_be_clickable(
+                    (By.ID, ":iw")
+                )
+            ).click()
+        except Exception:
+            self.browser.quit()
+            exit_error(
+                "Could not compose email",
+                "This error happens randomly. "
+                "Re-running the program might solve the issue"
+            )
+
+        try:
+            WebDriverWait(self.browser, 5).until(
+                EC.element_to_be_clickable(
+                    (By.ID, ":oc")
+                )
+            ).send_keys(recipients)
+
+            self.browser.find_element_by_id(":nu")\
+                        .send_keys(subject)
+            self.browser.find_element_by_id(":ox")\
+                        .send_keys(body)
+        except Exception as warning:
+            warn(
+                warning,
+                "Error writing email"
+            )
+            return
+
 
 if __name__ == "__main__":
     bot = web_bot()
 
     bot.google_logIn()
     # bot.submit_school_attendance()
-    bot.join_Google_Meet(0)
+    # bot.join_Google_Meet(0)
+    bot.send_email(
+        recipients=bot.student.email,
+        subject="attendance period 2",
+        body="present"
+    )
 
     # -for when no mic/cam perms: bot.browser.find_elements_by_class_name("U26fgb")[4].send_keys(Keys.RETURN)
 
