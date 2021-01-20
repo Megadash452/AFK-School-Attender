@@ -256,7 +256,7 @@ class web_bot:
         """Separate recipients by a comma."""
 
         self.browser.get("https://mail.google.com/mail/u/0/#inbox?compose=new")
-        log(f"Writing email to <{recipients}>")
+        log(f"Writing email to <{recipients}>...")
 
         try:
             WebDriverWait(self.browser, 7).until(
@@ -283,12 +283,30 @@ class web_bot:
                         .send_keys(subject)
             self.browser.find_element_by_id(":ox")\
                         .send_keys(body)
+            self.browser.find_element_by_id(":nk")\
+                        .click()
         except Exception as warning:
             warn(
                 warning,
                 "Error writing email"
             )
             return
+
+        try:
+            WebDriverWait(self.browser, 5).until(
+                EC.presence_of_all_elements_located(
+                    (By.CLASS_NAME, "aT")
+                )
+            )
+
+            time.sleep(3.5)
+
+            if "Message sent" in self.browser.find_elements_by_class_name("aT")[0].text:
+                log(f"Email sent to <{recipients}>")
+            else:
+                raise Exception("Email not sent")
+        except Exception as warning:
+            warn(warning, "Error sending email")
 
 
 if __name__ == "__main__":
@@ -297,11 +315,11 @@ if __name__ == "__main__":
     bot.google_logIn()
     # bot.submit_school_attendance()
     # bot.join_Google_Meet(0)
-    bot.send_email(
-        recipients=bot.student.email,
-        subject="attendance period 2",
-        body="present"
-    )
+    # bot.send_email(
+    #     recipients=bot.student.email,
+    #     subject="attendance period 2",
+    #     body="present"
+    # )
 
     # -for when no mic/cam perms: bot.browser.find_elements_by_class_name("U26fgb")[4].send_keys(Keys.RETURN)
 
