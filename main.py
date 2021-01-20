@@ -221,7 +221,7 @@ class web_bot:
             )
             return
 
-        # self.browser.find_element_by_class_name("freebirdFormviewerViewNavigationSubmitButton").send_keys(Keys.RETURN)
+        self.browser.find_element_by_class_name("freebirdFormviewerViewNavigationSubmitButton").send_keys(Keys.RETURN)
 
         log("Submitted School Attendance")
 
